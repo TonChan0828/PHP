@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+setcookie("name1", 'value1', time() + 60 * 60, '/', '', false, true);
+setcookie("name1", '', time() - 60 * 60, '/', '', false, true);
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クッキーの削除</title>
+</head>
+
+<body>
+    <p>PHPからクッキーを送出した後、すぐに削除しました。</p>
+</body>
+
+</html>
