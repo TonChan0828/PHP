@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMemosTable extends Migration
+class CreateTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateMemosTable extends Migration
      */
     public function up()
     {
-        Schema::create('memos', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->unsignedBigInteger('id', true);
-            $table->longText('content');
+            $table->string('name');
             $table->unsignedBigInteger('user_id');
             // 論理削除を定義deleted-atを自動生成
             $table->softDeletes();
@@ -33,6 +33,6 @@ class CreateMemosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('memos');
+        Schema::dropIfExists('tags');
     }
 }
