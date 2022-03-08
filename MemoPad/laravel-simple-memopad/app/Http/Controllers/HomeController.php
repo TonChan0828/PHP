@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Memo;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,47 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('create');
+        $memos = Memo::select('memos.*')->where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('updated_at', 'DESC')->get();
+        // dd($memos);
+        return view('create', compact('memos'));
+    }
+
+    public function store(Request $request)
+    {
+        $posts = $request->all();
+        // メソッドの引数を受け取った値を展開して止める　データ確認
+        // dd(\Auth::id());
+
+        Memo::insert(['content' => $posts['content'], 'user_id' => \Auth::id()]);
+        return redirect(route('home'));
+    }
+
+    public function edit($id)
+    {
+        $memos = Memo::select('memos.*')->where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('updated_at', 'DESC')->get();
+        // dd($memos);
+
+        $edit_memo = Memo::find($id);
+        return view('edit', compact('memos', 'edit_memo'));
+    }
+
+    public function update(Request $request)
+    {
+        $posts = $request->all();
+        // メソッドの引数を受け取った値を展開して止める　データ確認
+        // dd(\Auth::id());
+
+        Memo::where('id', $posts['memo_id'])->update(['content' => $posts['content']]);
+        return redirect(route('home'));
+    }
+
+    public function destroy(Request $request)
+    {
+        $posts = $request->all();
+        // メソッドの引数を受け取った値を展開して止める　データ確認
+        // dd(\Auth::id());
+
+        Memo::where('id', $posts['memo_id'])->update(['deleted_at' => date("Y-m-d H:i:s", time())]);
+        return redirect(route('home'));
     }
 }
