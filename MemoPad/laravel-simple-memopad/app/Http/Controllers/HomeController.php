@@ -27,15 +27,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $memos = Memo::select('memos.*')->where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('updated_at', 'DESC')->get();
         $tags = Tag::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')->get();
         // dd($tags);
-        return view('create', compact('memos', 'tags'));
+        return view('create', compact('tags'));
     }
 
     public function store(Request $request)
     {
         $posts = $request->all();
+
+        $request->validate(['content' => 'required']);
         // メソッドの引数を受け取った値を展開して止める　データ確認
         // dd($posts);
 
@@ -67,8 +68,6 @@ class HomeController extends Controller
     public function edit($id)
     {
         // メモを取得
-        $memos = Memo::select('memos.*')->where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('updated_at', 'DESC')->get();
-        // dd($memos);
 
         $edit_memo = Memo::select('memos.*', 'tags.id AS tag_id')
             ->leftJoin('memo_tags', 'memo_tags.memo_id', '=', 'memos.id')
@@ -85,12 +84,15 @@ class HomeController extends Controller
         // dd($include_tags);
         $tags = Tag::where('user_id', '=', \Auth::id())->whereNull('deleted_at')->orderBy('id', 'DESC')->get();
 
-        return view('edit', compact('memos', 'edit_memo', 'include_tags', 'tags'));
+        return view('edit', compact('edit_memo', 'include_tags', 'tags'));
     }
 
     public function update(Request $request)
     {
         $posts = $request->all();
+
+        $request->validate(['content' => 'required']);
+
         // メソッドの引数を受け取った値を展開して止める　データ確認
         // dd(\Auth::id());
 
