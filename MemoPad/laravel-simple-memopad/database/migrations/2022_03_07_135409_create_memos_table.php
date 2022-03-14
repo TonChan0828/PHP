@@ -21,7 +21,7 @@ class CreateMemosTable extends Migration
             $table->softDeletes();
             // timestampと書いてしまうと、レコード挿入時、更新時に値が入らないので、DB::envで直接記入
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->timestamp('vreated_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
